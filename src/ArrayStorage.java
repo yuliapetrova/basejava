@@ -4,67 +4,67 @@
 public class ArrayStorage {
 
     private static final int LENGTH = 10000;
-    Resume[] storage = new Resume[LENGTH];
+    private Resume[] storage = new Resume[LENGTH];
+    private int size = 0;
 
     void clear() {
-        this.storage = new Resume[LENGTH];
+        for (int i = 0; i < storage.length; i++) {
+            if (null != storage[i]) {
+                storage[i] = null;
+            }
+        }
+        size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < this.storage.length; i++) {
-            if (null == this.storage[i]) {
-                this.storage[i] = r;
+        for (int i = 0; i < storage.length; i++) {
+            if (null == storage[i]) {
+                storage[i] = r;
+                size++;
                 return;
             }
         }
     }
 
     Resume get(String uuid) {
-        for (Resume resume : this.storage) {
+        for (Resume resume : storage) {
             if (null != resume && uuid.equals(resume.uuid)) {
                 return resume;
             }
         }
-        Resume result = new Resume();
-        result.uuid = "No such element with uuid = " + uuid;
-        return result;
+        return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < this.storage.length; i++) {
-            if (null != this.storage[i] && uuid.equals(this.storage[i].uuid)) {
-                this.storage[i] = null;
+        for (int i = 0; i < storage.length; i++) {
+            if (null != storage[i] && uuid.equals(storage[i].uuid)) {
+                storage[i] = null;
+                size--;
             }
         }
-        formatArray();
+        storage = formatArray(LENGTH);
     }
 
-    private void formatArray() {
-        Resume[] newStorage = new Resume[LENGTH];
+    private Resume[] formatArray(int arraySize) {
+        Resume[] newStorage = new Resume[arraySize];
         int newStorageIndex = 0;
-        for (Resume resume : this.storage) {
+        for (Resume resume : storage) {
             if (null != resume) {
                 newStorage[newStorageIndex] = resume;
                 newStorageIndex++;
             }
         }
-        this.storage = newStorage;
+        return newStorage;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return storage;
+        return formatArray(size);
     }
 
     int size() {
-        int size = 0;
-        for (Resume resume : this.storage) {
-            if (null != resume) {
-                size++;
-            }
-        }
         return size;
     }
 }
