@@ -3,27 +3,20 @@
  */
 public class ArrayStorage {
 
-    private static final int LENGTH = 10000;
+    private static final int LENGTH = 10;
     private Resume[] storage = new Resume[LENGTH];
     private int size = 0;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            if (null != storage[i]) {
-                storage[i] = null;
-            }
+        for (int i = 0; i < size; i++) {
+            storage[i] = null;
         }
         size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (null == storage[i]) {
-                storage[i] = r;
-                size++;
-                return;
-            }
-        }
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
@@ -36,17 +29,28 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < size; i++) {
             if (null != storage[i] && uuid.equals(storage[i].uuid)) {
                 storage[i] = null;
                 size--;
             }
         }
-        storage = formatArray(LENGTH);
+        int j = 0;
+        for (int i = 0; i < LENGTH; i++) {
+            if (null != storage[i]) {
+                Resume temp = storage[j];
+                storage[j] = storage[i];
+                storage[i] = temp;
+                j++;
+            }
+        }
     }
 
-    private Resume[] formatArray(int arraySize) {
-        Resume[] newStorage = new Resume[arraySize];
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    Resume[] getAll() {
+        Resume[] newStorage = new Resume[size];
         int newStorageIndex = 0;
         for (Resume resume : storage) {
             if (null != resume) {
@@ -55,13 +59,6 @@ public class ArrayStorage {
             }
         }
         return newStorage;
-    }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll() {
-        return formatArray(size);
     }
 
     int size() {
