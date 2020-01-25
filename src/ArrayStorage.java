@@ -3,7 +3,7 @@
  */
 public class ArrayStorage {
 
-    private static final int LENGTH = 10;
+    private static final int LENGTH = 10000;
     private Resume[] storage = new Resume[LENGTH];
     private int size = 0;
 
