@@ -31,7 +31,7 @@ public class ArrayStorage {
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].uuid)) {
-                for (int j = i; j < size; j++) {
+                for (int j = i; j < size-1; j++) {
                     storage[j] = storage[j + 1];
                 }
                 size--;
@@ -44,10 +44,8 @@ public class ArrayStorage {
      */
     Resume[] getAll() {
         Resume[] newStorage = new Resume[size];
-        int newStorageIndex = 0;
         for (int i = 0; i < size; i++) {
-            newStorage[newStorageIndex] = storage[i];
-            newStorageIndex++;
+            newStorage[i] = storage[i];
         }
         return newStorage;
     }
